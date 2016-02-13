@@ -32,7 +32,7 @@ cd /var/backup
 # start by restoring the last backup:
 # This could fail if there's nothing to restore.
 
-duplicity --no-encryption $1 .
+duplicity --force --no-encryption $1 .
 
 # Now, start waiting for file system events on this path.
 # After an event, wait for a quiet period of N seconds before doing a backup
