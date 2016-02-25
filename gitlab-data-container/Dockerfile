@@ -9,6 +9,8 @@ RUN \
 	apk --purge -v del py-pip && \
 	rm /var/cache/apk/*
 
+RUN mkdir -p /var/log/gitlab/reconfigure
+
 VOLUME /var/opt/gitlab
 VOLUME /var/log/gitlab
 VOLUME /etc/gitlab
