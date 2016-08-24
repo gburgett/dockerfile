@@ -1,6 +1,6 @@
 #! /bin/bash
 
-set -ex
+set -e
 
 force=false
 while getopts "h?f" opt; do
