@@ -9,7 +9,7 @@ RUN wget "s3.amazonaws.com/aws-cli/awscli-bundle.zip" -O "awscli-bundle.zip" && 
     rm awscli-bundle.zip && \
     rm -rf awscli-bundle
 
-RUN apk add --no-cache openssl bash
+RUN apk add --no-cache openssl bash curl
 
 ADD acme.sh/ /acme.sh/
 RUN cd /acme.sh && \
