@@ -1,14 +1,20 @@
-FROM httpd:latest
+FROM alpine:latest
 MAINTAINER gordon.burgett@gmail.com
 
-RUN apt-get update && apt-get install -y curl unzip
-RUN apt-get install -y python
+RUN wget "s3.amazonaws.com/aws-cli/awscli-bundle.zip" -O "awscli-bundle.zip" && \
+    unzip awscli-bundle.zip && \
+    apk add --update groff less python && \
+    rm /var/cache/apk/* && \
+    ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws && \
+    rm awscli-bundle.zip && \
+    rm -rf awscli-bundle
 
-RUN curl -s -o "/tmp/awscli-bundle.zip" "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip"
-RUN unzip /tmp/awscli-bundle.zip
-RUN ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
+RUN apk add --no-cache openssl bash
 
-ADD letsencrypt/ /letsencrypt/
-RUN /letsencrypt/letsencrypt-auto --help
+ADD acme.sh/ /acme.sh/
+RUN cd /acme.sh && \
+    ./acme.sh --install && \
+    rm -r /acme.sh && \
+    install /root/.acme.sh/acme.sh /usr/bin/acme.sh
 
-RUN install /letsencrypt/letsencrypt-auto /usr/bin/letsencrypt
+CMD ["crond", "-f"]

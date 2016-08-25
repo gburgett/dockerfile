@@ -1,3 +1,3 @@
-[submodule "letsencrypt/letsencrypt"]
-	path = letsencrypt/letsencrypt
-	url = https://github.com/letsencrypt/letsencrypt
+[submodule "letsencrypt/acme.sh"]
+	path = letsencrypt/acme.sh
+	url = git@github.com:Neilpang/acme.sh.git
