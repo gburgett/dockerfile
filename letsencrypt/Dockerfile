@@ -17,4 +17,6 @@ RUN cd /acme.sh && \
     rm -r /acme.sh && \
     install /root/.acme.sh/acme.sh /usr/bin/acme.sh
 
+EXPOSE 80
+
 CMD ["crond", "-f"]
