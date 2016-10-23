@@ -15,3 +15,7 @@ RUN cd /acme.sh && \
     ./acme.sh --install --force && \
     rm -r /acme.sh && \
     install /root/.acme.sh/acme.sh /usr/bin/acme.sh
+
+ADD backup.sh /root/backup.sh
+ADD restore.sh /root/restore.sh
+WORKDIR /root/
