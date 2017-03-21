@@ -16,6 +16,6 @@ RUN cd /acme.sh && \
     rm -r /acme.sh && \
     install /root/.acme.sh/acme.sh /usr/bin/acme.sh
 
-ADD backup.sh /root/backup.sh
-ADD restore.sh /root/restore.sh
+COPY scripts /root/
+
 WORKDIR /root/
