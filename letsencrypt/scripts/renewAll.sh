@@ -18,4 +18,4 @@ while read -r path; do
     sed -i ':a;N;$!ba;s/\n/\\n/g' $path/dockercloud.key
 
     echo "built $path/dockercloud.key"
-done <<< "$domains"
+done <<< "$DOMAINS"
