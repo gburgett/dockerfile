@@ -1,7 +1,7 @@
 FROM httpd:2
 MAINTAINER gordon.burgett@gmail.com
 
-RUN apt-get update && apt-get install -y unzip curl python
+RUN apt-get update && apt-get install -y unzip curl python jq
 
 RUN curl -s -o "awscli-bundle.zip"  "s3.amazonaws.com/aws-cli/awscli-bundle.zip" && \
     unzip awscli-bundle.zip && \
