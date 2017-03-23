@@ -6,10 +6,12 @@
 KEYS=`find ~/.acme.sh/ -name dockercloud.key`
 
 while read -r keyfile; do
+    [[ -z "$keyfile" ]] && continue;
+
     # pull the name of the directory that the file is in, replacing dots with dashes to get the service name
     servicename=`dirname "$keyfile" | xargs basename | sed 's/\./-/g'`
 
-    serviceid=`curl -H "Authorization: $DOCKERCLOUD_AUTH" https://cloud.docker.com/api/app/v1/service/?name=$servicename | jq -r '.objects[].uuid'`
+    serviceid=`curl -sS -H "Authorization: $DOCKERCLOUD_AUTH" https://cloud.docker.com/api/app/v1/service/?name=$servicename | jq -r '.objects[].uuid'`
 
     [[ -z "$serviceid" ]] && echo "service $servicename doesnt exist" && continue;
 
@@ -18,15 +20,14 @@ while read -r keyfile; do
     cert=`cat $keyfile`
     envvars=`echo $service | jq -r ".container_envvars | map(if (.key == \"SSL_CERT\") then . + { \"value\": \"$cert\" } else . end)"`
 
-    curl -H "Authorization: $DOCKERCLOUD_AUTH" \
+    curl -sS -H "Authorization: $DOCKERCLOUD_AUTH" \
          -H "Content-Type: application/json"  \
          --request PATCH \
          -d "{\"container_envvars\": $envvars }" \
-         https://cloud.docker.com/api/app/v1/service/$serviceid/ 
+         https://cloud.docker.com/api/app/v1/service/$serviceid/ > /dev/null 
 
     echo "\npatched service $servicename, redeploying..."
     curl -H "Authorization: $DOCKERCLOUD_AUTH" -XPOST https://cloud.docker.com/api/app/v1/service/$serviceid/redeploy/
 
+    rm $keyfile
 done <<< "$KEYS"
-
-echo "please restart the load balancer"
